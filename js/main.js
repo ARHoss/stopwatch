@@ -1,17 +1,29 @@
 function Stopwatch(){
-    let startTIme, endTime, running, duration = 0;
+    let running, intervalId, duration = 0;
 
     
+    
+
+    let updateTime = function(){
+        
+        duration++
+        document.querySelector('#timer').textContent = duration;  
+    }
+
+
 
     this.reset = function(){
         if(duration == 0){
             throw new Error('Already Reset');
+        }else if(running){
+            throw new Error('Stop Timer');
         }
 
-        duration = 0;
-        startTIme=null;
-        endTime=null;
+        document.querySelector('#timer').textContent = duration = 0;
         running=null;
+        intervalId=null;
+
+        
 
     }
 
@@ -22,7 +34,7 @@ function Stopwatch(){
 
         running = true;
         
-        startTIme = new Date();
+        intervalId = setInterval(updateTime, 1000);
     }
     
     this.stop = function(){
@@ -32,9 +44,8 @@ function Stopwatch(){
 
         running = false;
         
-        endTime = new Date();
-
-        duration += endTime.getSeconds() - startTIme.getSeconds() ;
+        
+        clearInterval(intervalId);
 
     }
 
@@ -62,7 +73,7 @@ let stopwatch = new Stopwatch();
 let startButton = document.querySelector('#start');
 let stopButton = document.querySelector('#stop');
 let resetButton = document.querySelector('#reset');
-let timer = document.querySelector('#timer');
+
 
 
 startButton.addEventListener('click', stopwatch.start);
